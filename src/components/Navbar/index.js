@@ -1,7 +1,7 @@
 'use client'
 
 import { GlobalContext } from "@/app/context";
-import { adminNavOptions, navOptions, styles } from "@/utils";
+import { adminNavOptions, navOptions } from "@/utils";
 import { Fragment, useContext } from "react";
 import CommonModel from "../CommonModel";
 
@@ -53,18 +53,26 @@ const Navbar = () => {
             {
               !isAdminView && isAuthUser ?
                 <Fragment>
-                  <button className={styles.button}>Account</button>
-                  <button className={styles.button}>Cart</button>
+                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Account</button>
+                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Cart</button>
                 </Fragment>
                 : null
             }
             {
               user?.role === 'Admin' ?
-                isAdminView ? <button className={styles.button}>Client View</button> : <button className={styles.button}>Admin View</button>
+                isAdminView
+                  ?
+                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Client View</button>
+                  :
+                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Admin View</button>
                 : null
             }
             {
-              isAuthUser ? <button className={styles.button}>Logout</button> : <button className={styles.button}>Login</button>
+              isAuthUser
+                ?
+                <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Logout</button>
+                :
+                <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Login</button>
             }
             <button
               data-collapse-toggle="navbar-sticky"
