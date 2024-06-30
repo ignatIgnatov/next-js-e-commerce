@@ -3,6 +3,7 @@
 import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
 import { registrationFormControls } from "@/utils";
+import Link from "next/link";
 
 const Register = () => {
 
@@ -44,6 +45,9 @@ const Register = () => {
                                         <button className="mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide">
                                             Sign up
                                         </button>
+                                        <div className="flex justify-center items-center">
+                                            <p>You have an account yet? <Link href={'/login'} className="font-bold">Login here!</Link></p>
+                                        </div>
                                     </div>
                             }
                         </div>
