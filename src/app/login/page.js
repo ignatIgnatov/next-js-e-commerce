@@ -1,10 +1,55 @@
 'use client'
 
 import InputComponent from "@/components/FormElements/InputComponent"
+import { login } from "@/services/login"
 import { loginFormControls } from "@/utils"
 import Link from "next/link"
+import { useContext, useEffect, useState } from "react"
+import { GlobalContext } from "../context"
+import Cookies from "js-cookie"
+import { useRouter } from "next/navigation"
+
+const initialFormData = {
+  email: '',
+  password: ''
+}
 
 const Login = () => {
+
+  const [formData, setFormData] = useState(initialFormData);
+  const {
+    isAuthUser, setIsAuthUser, user, setUser
+  } = useContext(GlobalContext);
+
+  const router = useRouter();
+
+  const handleLoginOnSubmit = async () => {
+    //call the service file for login user
+    const response = await login(formData);
+
+    if (response.success) {
+      setIsAuthUser(true);
+      setUser(response?.finalData?.user);
+      setFormData(initialFormData);
+      Cookies.set('token', response?.finalData?.token);
+      localStorage.setItem('user', JSON.stringify(response?.finalData?.user));
+    } else {
+      setIsAuthUser(false);
+    }
+  }
+
+  const isValidForm = () => {
+    return formData && formData.email && formData.email.trim() !== ''
+      && formData.password && formData.password.trim() !== ''
+      ? true : false
+  }
+
+  useEffect(() => {
+    if (isAuthUser) {
+      router.push('/');
+    }
+  }, [isAuthUser])
+
   return (
     <div className="bg-white relative">
       <div className="flex flec-col items-center justify-between pt-0 pr-10 pb-0 pl-10 mt-8 mr-auto xl:px-5 lg: flex-row">
@@ -22,10 +67,21 @@ const Login = () => {
                       type={controlItem.type}
                       placeholder={controlItem.placeholder}
                       label={controlItem.label}
+                      value={formData[controlItem.id]}
+                      onChange={(event) => {
+                        setFormData({
+                          ...formData,
+                          [controlItem.id]: event.target.value
+                        });
+                      }}
                     />
                   )
                 }
-                <button className="mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide">
+                <button
+                  className="disabled:opacity-50 mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide"
+                  onClick={handleLoginOnSubmit}
+                  disabled={!isValidForm()}
+                >
                   Sign in
                 </button>
                 <div className="flex justify-center items-center">

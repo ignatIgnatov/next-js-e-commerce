@@ -4,12 +4,10 @@ import { GlobalContext } from "@/app/context";
 import { adminNavOptions, navOptions } from "@/utils";
 import { Fragment, useContext } from "react";
 import CommonModel from "../CommonModel";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const isAdminView = true;
-const isAuthUser = true;
-const user = {
-  role: 'Admin'
-}
 
 const NavItems = ({ isModelView = false }) => {
   return (
@@ -40,6 +38,16 @@ const NavItems = ({ isModelView = false }) => {
 const Navbar = () => {
 
   const { showNavModel, setShowNavModel } = useContext(GlobalContext);
+  const { user, isAuthUser, setIsAuthUser, setUser } = useContext(GlobalContext);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    setIsAuthUser(false);
+    setUser(null);
+    Cookies.remove('token');
+    localStorage.clear();
+    router.push('/')
+  }
 
   return (
     <>
@@ -51,7 +59,7 @@ const Navbar = () => {
           </div>
           <div className="flex md:order-2 gap-2">
             {
-              !isAdminView && isAuthUser ?
+              isAdminView && isAuthUser ?
                 <Fragment>
                   <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Account</button>
                   <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Cart</button>
@@ -59,20 +67,20 @@ const Navbar = () => {
                 : null
             }
             {
-              user?.role === 'Admin' ?
+              user?.role === 'admin' ?
                 isAdminView
                   ?
-                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Client View</button>
-                  :
                   <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Admin View</button>
+                  :
+                  <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Client View</button>
                 : null
             }
             {
               isAuthUser
                 ?
-                <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Logout</button>
+                <button onClick={handleLogout} className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Logout</button>
                 :
-                <button className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Login</button>
+                <button onClick={() => router.push('login')} className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Login</button>
             }
             <button
               data-collapse-toggle="navbar-sticky"
