@@ -8,7 +8,7 @@ const configOptions = {
 
 
 const connectToDB = async () => {
-    const connectionUrl = process.env(DATABASE_URL);
+    const connectionUrl = process.env.DATABASE_URL;
 
     mongoose.connect(connectionUrl, configOptions)
         .then(() => console.log('Ecommerce database connected successfully!'))

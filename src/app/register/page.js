@@ -2,12 +2,35 @@
 
 import InputComponent from "@/components/FormElements/InputComponent";
 import SelectComponent from "@/components/FormElements/SelectComponent";
+import { registerNewUser } from "@/services/register";
 import { registrationFormControls } from "@/utils";
 import Link from "next/link";
+import { useState } from "react";
+
+const isRegistred = false;
+
+const initialFormData = {
+    name: '',
+    email: '',
+    password: '',
+    role: 'customer'
+}
 
 const Register = () => {
 
-    const isRegistred = false;
+    const [formData, setFormData] = useState(initialFormData);
+
+    const isFormValid = () => {
+        return formData && formData.name && formData.name.trim() !== ''
+            && formData.email && formData.email.trim() !== ''
+            && formData.password && formData.password.trim() !== ''
+            ? true : false
+    }
+
+    const handleRegisterOnSubmit = async () => {
+        //call the service file for register user
+        const data = await registerNewUser(formData);
+    }
 
     return (
         <div className="bg-white relative">
@@ -32,17 +55,35 @@ const Register = () => {
                                                         type={controlItem.type}
                                                         placeholder={controlItem.placeholder}
                                                         label={controlItem.label}
+                                                        onChange={(event) => {
+                                                            setFormData({
+                                                                ...formData,
+                                                                [controlItem.id]: event.target.value
+                                                            })
+                                                        }}
+                                                        value={formData[controlItem.id]}
                                                     />
                                                     :
                                                     controlItem.componentType === 'select' ?
                                                         <SelectComponent
                                                             options={controlItem.options}
                                                             label={controlItem.label}
+                                                            onChange={(event) => {
+                                                                setFormData({
+                                                                    ...formData,
+                                                                    [controlItem.id]: event.target.value
+                                                                })
+                                                            }}
+                                                            value={formData[controlItem.id]}
                                                         />
                                                         : null
                                             )
                                         }
-                                        <button className="mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide">
+                                        <button
+                                            className="disabled:opacity-50 mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide"
+                                            disabled={!isFormValid()}
+                                            onClick={handleRegisterOnSubmit}
+                                        >
                                             Sign up
                                         </button>
                                         <div className="flex justify-center items-center">
