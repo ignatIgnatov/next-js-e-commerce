@@ -24,7 +24,7 @@ export const POST = async (req) => {
     if (error) {
         return NextResponse.json({
             success: false,
-            message: email.details[0]
+            message: error.details[0]
         });
     }
 
