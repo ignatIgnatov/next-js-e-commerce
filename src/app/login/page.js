@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from "react"
 import { GlobalContext } from "../context"
 import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
+import ComponentLevelLoader from "@/components/Loader/componentLevelLoader"
+import { Bounce, toast } from "react-toastify"
 
 const initialFormData = {
   email: '',
@@ -18,25 +20,15 @@ const Login = () => {
 
   const [formData, setFormData] = useState(initialFormData);
   const {
-    isAuthUser, setIsAuthUser, user, setUser
+    isAuthUser,
+    setIsAuthUser,
+    user,
+    setUser,
+    componentLevelLoader,
+    setComponentLevelLoader,
   } = useContext(GlobalContext);
 
   const router = useRouter();
-
-  const handleLoginOnSubmit = async () => {
-    //call the service file for login user
-    const response = await login(formData);
-
-    if (response.success) {
-      setIsAuthUser(true);
-      setUser(response?.finalData?.user);
-      setFormData(initialFormData);
-      Cookies.set('token', response?.finalData?.token);
-      localStorage.setItem('user', JSON.stringify(response?.finalData?.user));
-    } else {
-      setIsAuthUser(false);
-    }
-  }
 
   const isValidForm = () => {
     return formData && formData.email && formData.email.trim() !== ''
@@ -44,11 +36,52 @@ const Login = () => {
       ? true : false
   }
 
-  useEffect(() => {
-    if (isAuthUser) {
-      router.push('/');
+  const handleLogin = async () => {
+    setComponentLevelLoader({ loading: true, id: "" });
+    const res = await login(formData);
+
+    console.log(res);
+
+    if (res.success) {
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setIsAuthUser(true);
+      setUser(res?.finalData?.user);
+      setFormData(initialFormData);
+      Cookies.set("token", res?.finalData?.token);
+      localStorage.setItem("user", JSON.stringify(res?.finalData?.user));
+      setComponentLevelLoader({ loading: false, id: "" });
+    } else {
+      toast.error(res.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      setIsAuthUser(false);
+      setComponentLevelLoader({ loading: false, id: "" });
     }
-  }, [isAuthUser])
+  }
+
+  console.log(isAuthUser, user);
+
+  useEffect(() => {
+    if (isAuthUser) router.push("/");
+  }, [isAuthUser]);
 
   return (
     <div className="bg-white relative">
@@ -79,10 +112,20 @@ const Login = () => {
                 }
                 <button
                   className="disabled:opacity-50 mt-6 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out focus:shadow font-medium upercase tracking-wide"
-                  onClick={handleLoginOnSubmit}
+                  onClick={handleLogin}
                   disabled={!isValidForm()}
                 >
-                  Sign in
+                  {componentLevelLoader && componentLevelLoader.loading ? (
+                    <ComponentLevelLoader
+                      text={"Logging In"}
+                      color={"#ffffff"}
+                      loading={
+                        componentLevelLoader && componentLevelLoader.loading
+                      }
+                    />
+                  ) : (
+                    "Sign in"
+                  )}
                 </button>
                 <div className="flex justify-center items-center">
                   <p>Don't have an account yet? <Link href={'/register'} className="font-bold">Register here!</Link></p>
