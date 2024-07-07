@@ -1,9 +1,14 @@
+import { getAllAdminProducts } from "@/services/product"
+
 const { default: CommonListing } = require("@/components/CommonListing")
 
 
-const AdminAllProducts = () => {
+const AdminAllProducts = async () => {
+
+  const allAdminProducts = await getAllAdminProducts();
+
   return (
-    <CommonListing />
+    <CommonListing data={allAdminProducts && allAdminProducts.data} />
   )
 }
 
