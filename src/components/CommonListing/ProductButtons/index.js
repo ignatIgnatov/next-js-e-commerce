@@ -6,6 +6,7 @@ import { GlobalContext } from "@/app/context";
 import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { toast } from "react-toastify";
+import { deleteAProduct } from "@/services/product";
 
 const ProductButtons = ({ item }) => {
     const pathName = usePathname();
@@ -20,24 +21,24 @@ const ProductButtons = ({ item }) => {
 
     const isAdminView = pathName.includes("admin-view");
 
-    // async function handleDeleteProduct(item) {
-    //     setComponentLevelLoader({ loading: true, id: item._id });
+    const handleDeleteProduct = async (item) => {
+        setComponentLevelLoader({ loading: true, id: item._id });
 
-    //     const res = await deleteAProduct(item._id);
+        const res = await deleteAProduct(item._id);
 
-    //     if (res.success) {
-    //         setComponentLevelLoader({ loading: false, id: "" });
-    //         toast.success(res.message, {
-    //             position: toast.POSITION.TOP_RIGHT,
-    //         });
-    //         router.refresh();
-    //     } else {
-    //         toast.error(res.message, {
-    //             position: toast.POSITION.TOP_RIGHT,
-    //         });
-    //         setComponentLevelLoader({ loading: false, id: "" });
-    //     }
-    // }
+        if (res.success) {
+            setComponentLevelLoader({ loading: false, id: "" });
+            toast.success(res.message, {
+                position: 'top-right',
+            });
+            router.refresh();
+        } else {
+            toast.error(res.message, {
+                position: 'top-right',
+            });
+            setComponentLevelLoader({ loading: false, id: "" });
+        }
+    }
 
     // async function handleAddToCart(getItem) {
     //     setComponentLevelLoader({ loading: true, id: getItem._id });
@@ -73,7 +74,7 @@ const ProductButtons = ({ item }) => {
                 Update
             </button>
             <button
-
+                onClick={() => handleDeleteProduct(item)}
                 className="mt-1.5 flex w-full justify-center bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white"
             >
                 {componentLevelLoader &&
