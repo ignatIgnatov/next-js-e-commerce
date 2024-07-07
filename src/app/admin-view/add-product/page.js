@@ -4,15 +4,61 @@
 import InputComponent from "@/components/FormElements/InputComponent"
 import SelectComponent from "@/components/FormElements/SelectComponent"
 import TileComponent from "@/components/FormElements/TileComponent"
-import { AvailableSizes, adminAddProductformControls } from "@/utils"
+import {
+  AvailableSizes,
+  adminAddProductformControls,
+  firebaseConfig,
+  firebaseStorageUrl
+} from "@/utils"
+import { initializeApp } from 'firebase/app'
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app, firebaseStorageUrl);
 
+const createUniqueFileName = (getFile) => {
+  const timeStamp = Date.now();
+  const randomStringValue = Math.random().toString(36).substring(2, 12);
+
+  return `${getFile.name}-${timeStamp}-${randomStringValue}`
+}
+
+const helperForUploadingImageToFirwbase = async (file) => {
+  const getFileName = createUniqueFileName(file);
+  const storageReference = ref(storage, `ecommerce/${getFileName}`);
+  const uploadImage = uploadBytesResumable(storageReference, file);
+
+  return new Promise((resolve, reject) => {
+    uploadImage.on(
+      'state_changed',
+      (snapshot) => { },
+      (error) => {
+        console.log(error)
+        reject(error);
+      },
+      () => {
+        getDownloadURL(uploadImage.snapshot.ref)
+          .then(downloadUrl => resolve(downloadUrl))
+          .catch(error => reject(error))
+      })
+  })
+}
 
 const AdminAddNewProduct = () => {
 
-  const handleImage = () => {
+  const handleImage = async (event) => {
+    const extractImageFromUrl = await helperForUploadingImageToFirwbase(event.target.files[0]);
 
+    console.log(extractImageFromUrl);
   }
+
+
 
   return (
     <div className="w-full mt- mr-0 mb-0 ml-0 relative">

@@ -1,8 +1,14 @@
 import connectToDB from "@/database";
 import Product from "@/models/product";
+import { firebaseConfig, firebaseStorageUrl } from "@/utils";
 import Joi from "joi";
 import { NextResponse } from "next/server";
+import { initializeApp } from 'firebase/app'
+import { getStorage } from 'firebase/storage'
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app, firebaseStorageUrl);
 
 const AddNewProductSchema = Joi.object({
     name: Joi.string().required(),

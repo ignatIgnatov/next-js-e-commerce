@@ -176,15 +176,27 @@ export const adminAddProductformControls = [
 
 export const AvailableSizes = [
     {
-      id: "s",
-      label: "S",
+        id: "s",
+        label: "S",
     },
     {
-      id: "m",
-      label: "M",
+        id: "m",
+        label: "M",
     },
     {
-      id: "l",
-      label: "L",
+        id: "l",
+        label: "L",
     },
-  ];
+];
+
+// Your web app's Firebase configuration
+export const firebaseConfig = {
+    apiKey: "AIzaSyCEW6O0tFh8BMg9GbMsGu7jrLmL6lNF_fU",
+    authDomain: "next-js-ecommerce-2024-34086.firebaseapp.com",
+    projectId: "next-js-ecommerce-2024-34086",
+    storageBucket: "next-js-ecommerce-2024-34086.appspot.com",
+    messagingSenderId: "970344152458",
+    appId: "1:970344152458:web:782b85c090af9c8e605c73"
+};
+
+export const firebaseStorageUrl = 'gs://next-js-ecommerce-2024-34086.appspot.com';
