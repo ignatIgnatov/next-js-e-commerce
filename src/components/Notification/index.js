@@ -1,7 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default Notification = () => {
+const Notification = () => {
     return (
         <ToastContainer
             position="top-right"
@@ -17,3 +17,5 @@ export default Notification = () => {
         />
     );
 }
+
+export default Notification;

@@ -12,12 +12,12 @@ export const PUT = async (req) => {
         const extractData = await req.json();
 
         const {
-            id, name, price, description, sizes, deliveryInfo, onSale, priceDrop, imageUrl
+            _id, name, price, description, sizes, deliveryInfo, onSale, priceDrop, imageUrl
         } = extractData;
 
         const updatedProduct = await Product.findByIdAndUpdate(
             {
-                _id: id
+                _id: _id
             },
             {
                 name, price, description, sizes, deliveryInfo, onSale, priceDrop, imageUrl

@@ -15,6 +15,7 @@ const GlobalState = ({ children }) => {
         loading: false,
         id: "",
     });
+    const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
 
     useEffect(() => {
         if (Cookies.get('token') !== undefined) {
@@ -36,8 +37,13 @@ const GlobalState = ({ children }) => {
             pageLevelLoader,
             setPageLevelLoader,
             componentLevelLoader,
-            setComponentLevelLoader
-        }}>{children}</GlobalContext.Provider>
+            setComponentLevelLoader,
+            currentUpdatedProduct,
+            setCurrentUpdatedProduct
+        }}
+        >
+            {children}
+        </GlobalContext.Provider>
     )
 }
 

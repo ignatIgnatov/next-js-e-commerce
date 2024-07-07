@@ -6,7 +6,7 @@ import SelectComponent from "@/components/FormElements/SelectComponent"
 import TileComponent from "@/components/FormElements/TileComponent"
 import ComponentLevelLoader from "@/components/Loader/componentLevelLoader"
 import Notification from "@/components/Notification"
-import { addNewProduct } from "@/services/product"
+import { addNewProduct, updateAProduct } from "@/services/product"
 import {
   AvailableSizes,
   adminAddProductformControls,
@@ -21,7 +21,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { useRouter } from "next/navigation"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
 // Initialize Firebase
@@ -71,7 +71,7 @@ const initialFormData = {
 const AdminAddNewProduct = () => {
 
   const [formData, setFormData] = useState(initialFormData);
-  const { componentLevelLoader, setComponentLevelLoader } = useContext(GlobalContext);
+  const { componentLevelLoader, setComponentLevelLoader, currentUpdatedProduct, setCurrentUpdatedProduct } = useContext(GlobalContext);
   const router = useRouter();
 
   const handleImage = async (event) => {
@@ -103,7 +103,9 @@ const AdminAddNewProduct = () => {
 
   const handleAddProduct = async () => {
     setComponentLevelLoader({ loading: true, id: '' })
-    const res = await addNewProduct(formData);
+    const res = currentUpdatedProduct !== null
+      ? await updateAProduct(formData)
+      : await addNewProduct(formData);
 
     console.log(res);
 
@@ -111,6 +113,7 @@ const AdminAddNewProduct = () => {
       setComponentLevelLoader({ loading: false, id: '' });
       toast.success(res.message, { position: 'top-right' });
 
+      setCurrentUpdatedProduct(null);
       setFormData(initialFormData);
       setTimeout(() => {
         router.push('/admin-view/all-products')
@@ -122,6 +125,12 @@ const AdminAddNewProduct = () => {
       setFormData(initialFormData);
     }
   }
+
+  useEffect(() => {
+    if (currentUpdatedProduct !== null) {
+      setFormData(currentUpdatedProduct);
+    }
+  }, [currentUpdatedProduct]);
 
   return (
     <div className="w-full mt- mr-0 mb-0 ml-0 relative">
@@ -178,12 +187,17 @@ const AdminAddNewProduct = () => {
               {
                 componentLevelLoader && componentLevelLoader.loading ?
                   <ComponentLevelLoader
-                    text={"Adding product"}
+                    text={currentUpdatedProduct !== null ? "Updating product" : "Adding product"}
                     color={"#ffffff"}
                     loading={
                       componentLevelLoader && componentLevelLoader.loading
                     }
-                  /> : 'Add product'
+                  /> :
+                  (
+                    currentUpdatedProduct !== null
+                      ? 'Update Product'
+                      : 'Add product'
+                  )
               }
             </button>
           </div>
