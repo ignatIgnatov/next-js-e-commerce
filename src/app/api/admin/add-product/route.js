@@ -67,25 +67,25 @@ export const POST = async (req) => {
                 return NextResponse.json({
                     success: true,
                     message: 'Product added successfully!'
-                })
+                });
             } else {
                 return NextResponse({
                     success: true,
                     message: 'Failed to add the product!'
-                })
+                });
             }
 
         } else {
             return NextResponse.json({
                 success: false,
                 message: 'You are not authorized!'
-            })
+            });
         }
     } catch (error) {
         console.log(error);
         return NextResponse.json({
             success: false,
             message: 'Something went wrong! Please try again!'
-        })
+        });
     }
 }
