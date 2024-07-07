@@ -1,8 +1,9 @@
+const { default: CommonListing } = require("@/components/CommonListing")
 
 
 const AdminAllProducts = () => {
   return (
-    <div>AdminAllProducts</div>
+    <CommonListing />
   )
 }
 
