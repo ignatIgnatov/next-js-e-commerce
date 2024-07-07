@@ -6,10 +6,19 @@ const TileComponent = ({ data, selected = [], onClick }) => {
             {
                 data.map(dataItem => (
                     <label
-                        className='cursor-pointer'
+                        className={`cursor-pointer ${selected && selected.length && selected.map(
+                            item => item.id
+                        ).indexOf(dataItem.id) !== -1 ? 'bg-black' : ''
+                            }`}
                         key={dataItem.id}
+                        onClick={() => onClick(dataItem)}
                     >
-                        <span className='rounded-lg border border-black px-6 py-1 font-bold'>
+                        <span
+                            className={`rounded-lg border border-black px-6 py-1 font-bold ${selected && selected.length && selected.map(
+                                item => item.id
+                            ).indexOf(dataItem.id) !== -1 ? 'text-white' : ''
+                                }`}
+                        >
                             {dataItem.label}
                         </span>
                     </label>

@@ -1,4 +1,3 @@
-
 'use client'
 
 import InputComponent from "@/components/FormElements/InputComponent"
@@ -17,6 +16,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { useState } from "react"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -50,16 +50,50 @@ const helperForUploadingImageToFirwbase = async (file) => {
   })
 }
 
+const initialFormData = {
+  name: '',
+  price: 0,
+  description: '',
+  category: 'men',
+  sizes: [],
+  deliveryInfo: '',
+  onSale: 'no',
+  imageUrl: '',
+  priceDrop: 0
+}
+
 const AdminAddNewProduct = () => {
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleImage = async (event) => {
     const extractImageFromUrl = await helperForUploadingImageToFirwbase(event.target.files[0]);
 
-    console.log(extractImageFromUrl);
+    if (extractImageFromUrl != '') {
+      setFormData({
+        ...formData,
+        imageUrl: extractImageFromUrl
+      });
+    }
   }
 
+  function handleTileClick(getCurrentItem) {
+    let copySizes = [...formData.sizes];
+    const index = copySizes.findIndex((item) => item.id === getCurrentItem.id);
 
+    if (index === -1) {
+      copySizes.push(getCurrentItem);
+    } else {
+      copySizes = copySizes.filter((item) => item.id !== getCurrentItem.id);
+    }
 
+    setFormData({
+      ...formData,
+      sizes: copySizes,
+    });
+  }
+
+  console.log(formData);
   return (
     <div className="w-full mt- mr-0 mb-0 ml-0 relative">
       <div className="flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative">
@@ -73,7 +107,10 @@ const AdminAddNewProduct = () => {
 
           <div className="flex gap-6 flex-col">
             <label>Available sizes</label>
-            <TileComponent data={AvailableSizes} />
+            <TileComponent
+              selected={formData.sizes}
+              onClick={handleTileClick}
+              data={AvailableSizes} />
             {
               adminAddProductformControls.map(controlItem =>
               (
@@ -82,11 +119,25 @@ const AdminAddNewProduct = () => {
                     type={controlItem.type}
                     placeholder={controlItem.placeholder}
                     label={controlItem.label}
+                    value={formData[controlItem.id]}
+                    onChange={(event) => {
+                      setFormData({
+                        ...formData,
+                        [controlItem.id]: event.target.value
+                      })
+                    }}
                   /> :
                   controlItem.componentType === 'select' ?
                     <SelectComponent
                       label={controlItem.label}
                       options={controlItem.options}
+                      value={formData[controlItem.id]}
+                      onChange={(event) => {
+                        setFormData({
+                          ...formData,
+                          [controlItem.id]: event.target.value
+                        })
+                      }}
                     /> : null
               )
               )
