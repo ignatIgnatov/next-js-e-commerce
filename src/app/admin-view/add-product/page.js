@@ -1,8 +1,12 @@
 'use client'
 
+import { GlobalContext } from "@/app/context"
 import InputComponent from "@/components/FormElements/InputComponent"
 import SelectComponent from "@/components/FormElements/SelectComponent"
 import TileComponent from "@/components/FormElements/TileComponent"
+import ComponentLevelLoader from "@/components/Loader/componentLevelLoader"
+import Notification from "@/components/Notification"
+import { addNewProduct } from "@/services/product"
 import {
   AvailableSizes,
   adminAddProductformControls,
@@ -16,7 +20,9 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useContext, useState } from "react"
+import { toast } from "react-toastify"
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -65,6 +71,8 @@ const initialFormData = {
 const AdminAddNewProduct = () => {
 
   const [formData, setFormData] = useState(initialFormData);
+  const { componentLevelLoader, setComponentLevelLoader } = useContext(GlobalContext);
+  const router = useRouter();
 
   const handleImage = async (event) => {
     const extractImageFromUrl = await helperForUploadingImageToFirwbase(event.target.files[0]);
@@ -93,7 +101,28 @@ const AdminAddNewProduct = () => {
     });
   }
 
-  console.log(formData);
+  const handleAddProduct = async () => {
+    setComponentLevelLoader({ loading: true, id: '' })
+    const res = await addNewProduct(formData);
+
+    console.log(res);
+
+    if (res.success) {
+      setComponentLevelLoader({ loading: false, id: '' });
+      toast.success(res.message, { position: 'top-right' });
+
+      setFormData(initialFormData);
+      setTimeout(() => {
+        router.push('/admin-view/all-products')
+      }, 1000)
+
+    } else {
+      setComponentLevelLoader({ loading: false, id: '' })
+      toast.error(res.message, { position: 'top-right' });
+      setFormData(initialFormData);
+    }
+  }
+
   return (
     <div className="w-full mt- mr-0 mb-0 ml-0 relative">
       <div className="flex flex-col items-start justify-start p-10 bg-white shadow-2xl rounded-xl relative">
@@ -143,11 +172,24 @@ const AdminAddNewProduct = () => {
               )
             }
             <button
+              onClick={handleAddProduct}
               className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white font-medium uppercase tracking-wide"
-            >Add Product</button>
+            >
+              {
+                componentLevelLoader && componentLevelLoader.loading ?
+                  <ComponentLevelLoader
+                    text={"Adding product"}
+                    color={"#ffffff"}
+                    loading={
+                      componentLevelLoader && componentLevelLoader.loading
+                    }
+                  /> : 'Add product'
+              }
+            </button>
           </div>
         </div>
       </div>
+      <Notification />
     </div>
   )
 }

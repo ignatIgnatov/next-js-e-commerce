@@ -10,6 +10,7 @@ import Cookies from "js-cookie"
 import { useRouter } from "next/navigation"
 import ComponentLevelLoader from "@/components/Loader/componentLevelLoader"
 import { Bounce, toast } from "react-toastify"
+import Notification from "@/components/Notification"
 
 const initialFormData = {
   email: '',
@@ -43,17 +44,7 @@ const Login = () => {
     console.log(res);
 
     if (res.success) {
-      toast.success(res.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.success(res.message, { position: 'top-right' });
       setIsAuthUser(true);
       setUser(res?.finalData?.user);
       setFormData(initialFormData);
@@ -61,17 +52,7 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(res?.finalData?.user));
       setComponentLevelLoader({ loading: false, id: "" });
     } else {
-      toast.error(res.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(res.message, { position: 'top-right' });
       setIsAuthUser(false);
       setComponentLevelLoader({ loading: false, id: "" });
     }
@@ -136,6 +117,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      <Notification />
     </div>
   )
 }

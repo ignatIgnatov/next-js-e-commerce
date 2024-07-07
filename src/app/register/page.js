@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GlobalContext } from "../context";
 import ComponentLevelLoader from "@/components/Loader/componentLevelLoader";
+import Notification from "@/components/Notification";
 
 const initialFormData = {
     name: '',
@@ -39,16 +40,12 @@ const Register = () => {
         const data = await registerNewUser(formData);
 
         if (data.success) {
-            toast.success(data.message, {
-                position: 'top-right',
-            });
+            toast.success(data.message, { position: 'top-right' });
             setIsRegistered(true);
             setPageLevelLoader(false);
             setFormData(initialFormData);
         } else {
-            toast.error(data.message, {
-                position: 'top-right',
-            });
+            toast.error(data.message, { position: 'top-right' });
             setPageLevelLoader(false);
             setFormData(initialFormData);
         }
@@ -134,6 +131,7 @@ const Register = () => {
                     </div>
                 </div>
             </div>
+            <Notification />
         </div>
     )
 }
