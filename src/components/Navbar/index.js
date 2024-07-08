@@ -90,7 +90,7 @@ const Navbar = () => {
                   >Client View</button>
                   :
                   <button
-                    onClick={() => router.push('admin-view')}
+                    onClick={() => router.push('/admin-view')}
                     className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'
                   >Admin View</button>
                 : null
@@ -100,7 +100,7 @@ const Navbar = () => {
                 ?
                 <button onClick={handleLogout} className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Logout</button>
                 :
-                <button onClick={() => router.push('login')} className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Login</button>
+                <button onClick={() => router.push('/login')} className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'>Login</button>
             }
             <button
               data-collapse-toggle="navbar-sticky"
