@@ -191,12 +191,12 @@ export const AvailableSizes = [
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
-    apiKey: "AIzaSyCEW6O0tFh8BMg9GbMsGu7jrLmL6lNF_fU",
+    apiKey: process.env.FIREBASE_API_KEY,
     authDomain: "next-js-ecommerce-2024-34086.firebaseapp.com",
     projectId: "next-js-ecommerce-2024-34086",
     storageBucket: "next-js-ecommerce-2024-34086.appspot.com",
-    messagingSenderId: "970344152458",
-    appId: "1:970344152458:web:782b85c090af9c8e605c73"
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID
 };
 
-export const firebaseStorageUrl = 'gs://next-js-ecommerce-2024-34086.appspot.com';
+export const firebaseStorageUrl = process.env.FIREBASE_STORAGE_URL;

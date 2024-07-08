@@ -65,7 +65,7 @@ export const deleteAProduct = async (id) => {
             },
         });
 
-        const data = response.json();
+        const data = await response.json();
         return data;
     } catch (error) {
         console.log(error);
@@ -85,6 +85,24 @@ export const productByCategory = async (id) => {
         const data = await res.json();
 
         return data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const productById = async (id) => {
+    try {
+        const res = await fetch(
+            `http://localhost:3000/api/admin/product-by-id?id=${id}`,
+            {
+                method: "GET",
+                cache: "no-store",
+            }
+        );
+
+        const data = await res.json();
+        return data;
+        
     } catch (error) {
         console.log(error);
     }
