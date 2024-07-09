@@ -7,7 +7,7 @@ export const addNewProduct = async (formData) => {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                Authorizzation: `Bearer ${Cookies.get('token')}`
+                Authorization: `Bearer ${Cookies.get('token')}`
             },
             body: JSON.stringify(formData)
         })
@@ -42,7 +42,7 @@ export const updateAProduct = async (formData) => {
             method: 'PUT',
             headers: {
                 'content-type': 'application/json',
-                Authorizzation: `Bearer ${Cookies.get('token')}`
+                Authorization: `Bearer ${Cookies.get('token')}`
             },
             body: JSON.stringify(formData)
         });
@@ -61,7 +61,7 @@ export const deleteAProduct = async (id) => {
         const response = await fetch(`/api/admin/delete-product?id=${id}`, {
             method: 'DELETE',
             headers: {
-                Authorizzation: `Bearer ${Cookies.get('token')}`
+                Authorization: `Bearer ${Cookies.get('token')}`
             },
         });
 

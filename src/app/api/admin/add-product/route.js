@@ -1,4 +1,5 @@
 import connectToDB from "@/database";
+import AuthUser from "@/middleware/AuthUser";
 import Product from "@/models/product";
 import Joi from "joi";
 import { NextResponse } from "next/server";
@@ -22,11 +23,12 @@ export const dynamic = 'force-dynamic';
 export const POST = async (req) => {
     try {
         await connectToDB();
-        //for now we use constant admin user. Next we will do middleware for this
-        const user = 'admin'
 
+        const isAuthUser = await AuthUser(req);
 
-        if (user === 'admin') {
+        console.log(isAuthUser);
+
+        if (isAuthUser?.admin === 'admin') {
 
             const extractData = await req.json();
 

@@ -102,26 +102,30 @@ const AdminAddNewProduct = () => {
   }
 
   const handleAddProduct = async () => {
-    setComponentLevelLoader({ loading: true, id: '' })
-    const res = currentUpdatedProduct !== null
-      ? await updateAProduct(formData)
-      : await addNewProduct(formData);
+    setComponentLevelLoader({ loading: true, id: "" });
+    const res =
+      currentUpdatedProduct !== null
+        ? await updateAProduct(formData)
+        : await addNewProduct(formData);
 
     console.log(res);
 
     if (res.success) {
-      setComponentLevelLoader({ loading: false, id: '' });
-      toast.success(res.message, { position: 'top-right' });
+      setComponentLevelLoader({ loading: false, id: "" });
+      toast.success(res.message, {
+        position: 'top-right',
+      });
 
-      setCurrentUpdatedProduct(null);
       setFormData(initialFormData);
+      setCurrentUpdatedProduct(null)
       setTimeout(() => {
-        router.push('/admin-view/all-products')
-      }, 1000)
-
+        router.push("/admin-view/all-products");
+      }, 1000);
     } else {
-      setComponentLevelLoader({ loading: false, id: '' })
-      toast.error(res.message, { position: 'top-right' });
+      toast.error(res.message, {
+        position: 'top-right',
+      });
+      setComponentLevelLoader({ loading: false, id: "" });
       setFormData(initialFormData);
     }
   }
