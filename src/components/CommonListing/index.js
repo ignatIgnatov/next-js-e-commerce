@@ -23,7 +23,6 @@ const CommonListing = ({ data }) => {
                             <article
                                 className="relative flex flex-col overflow-hidden border cursor-pointer rounded-xl"
                                 key={item._id}
-                                onClick={() => router.push(`/product/${item._id}`)}
                             >
                                 <ProductTile item={item} />
                                 <ProductButton item={item} />

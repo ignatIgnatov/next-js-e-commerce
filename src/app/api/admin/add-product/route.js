@@ -26,8 +26,6 @@ export const POST = async (req) => {
 
         const isAuthUser = await AuthUser(req);
 
-        console.log(isAuthUser);
-
         if (isAuthUser?.admin === 'admin') {
 
             const extractData = await req.json();
