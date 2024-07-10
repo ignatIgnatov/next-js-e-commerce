@@ -11,9 +11,9 @@ export const PUT = async (req) => {
     try {
         await connectToDB();
 
-        const isAuthUser = AuthUser(req);
+        const isAuthUser = await AuthUser(req);
 
-        if (isAuthUser?.admin === 'admin') {
+        if (isAuthUser?.role === 'admin') {
 
             const extractData = await req.json();
 
@@ -21,7 +21,7 @@ export const PUT = async (req) => {
                 _id, name, price, description, sizes, deliveryInfo, onSale, priceDrop, imageUrl
             } = extractData;
 
-            const updatedProduct = await Product.findByIdAndUpdate(
+            const updatedProduct = await Product.findOneAndUpdate(
                 {
                     _id: _id
                 },

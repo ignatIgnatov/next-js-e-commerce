@@ -12,9 +12,9 @@ export const dynamic = 'force-dynamic';
 export const DELETE = async (req) => {
     try {
         await connectToDB();
-        const isAuthUser = AuthUser(req);
+        const isAuthUser = await AuthUser(req);
 
-        if (isAuthUser?.admin === 'admin') {
+        if (isAuthUser?.role === 'admin') {
 
             const { searchParams } = new URL(req.url);
             const id = searchParams.get('id');
