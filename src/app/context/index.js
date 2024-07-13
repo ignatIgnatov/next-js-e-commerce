@@ -16,6 +16,7 @@ const GlobalState = ({ children }) => {
         id: "",
     });
     const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
+    const [showCartModal, setShowCartModal] = useState(false);
 
     useEffect(() => {
         if (Cookies.get('token') !== undefined) {
@@ -39,7 +40,9 @@ const GlobalState = ({ children }) => {
             componentLevelLoader,
             setComponentLevelLoader,
             currentUpdatedProduct,
-            setCurrentUpdatedProduct
+            setCurrentUpdatedProduct,
+            showCartModal,
+            setShowCartModal
         }}
         >
             {children}

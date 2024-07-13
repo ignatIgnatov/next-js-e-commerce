@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import { deleteAProduct } from "@/services/product";
+import { addToCart } from "@/services/cart";
 
 const ProductButtons = ({ item }) => {
     const pathName = usePathname();
@@ -41,6 +42,8 @@ const ProductButtons = ({ item }) => {
     }
 
     const handleAddToCart = async (getItem) => {
+        console.log(getItem);
+        console.log(user);
         setComponentLevelLoader({ loading: true, id: getItem._id });
 
         const res = await addToCart({ productID: getItem._id, userID: user._id });
