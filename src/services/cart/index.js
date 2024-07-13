@@ -14,8 +14,8 @@ export const addToCart = async (formData) => {
     const data = await res.json();
 
     return data;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -29,10 +29,10 @@ export const getAllCartItems = async (id) => {
     });
 
     const data = await res.json();
-
     return data;
-  } catch (e) {
-    console.log(e);
+
+  } catch (error) {
+    console.log(error);
   }
 };
 

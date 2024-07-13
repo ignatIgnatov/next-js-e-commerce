@@ -42,8 +42,7 @@ const ProductButtons = ({ item }) => {
     }
 
     const handleAddToCart = async (getItem) => {
-        console.log(getItem);
-        console.log(user);
+
         setComponentLevelLoader({ loading: true, id: getItem._id });
 
         const res = await addToCart({ productID: getItem._id, userID: user._id });

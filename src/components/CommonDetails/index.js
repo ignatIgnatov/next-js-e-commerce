@@ -14,8 +14,24 @@ const CommonDetails = ({ item }) => {
         setShowCartModal,
     } = useContext(GlobalContext);
 
-    const handleAddToCart = (item) => {
+    const handleAddToCart = async (getItem) => {
+        setComponentLevelLoader({ loading: true, id: "" });
 
+        const res = await addToCart({ productID: getItem._id, userID: user._id });
+
+        if (res.success) {
+            toast.success(res.message, {
+                position: 'top-right',
+            });
+            setComponentLevelLoader({ loading: false, id: "" });
+            setShowCartModal(true);
+        } else {
+            toast.error(res.message, {
+                position: 'top-right',
+            });
+            setComponentLevelLoader({ loading: false, id: "" });
+            setShowCartModal(true);
+        }
     }
 
     return (
