@@ -1,6 +1,6 @@
 'use client'
 
-import { GlobalContext } from "@/app/context";
+import { GlobalContext } from "@/context";
 import { adminNavOptions, navOptions } from "@/utils";
 import { Fragment, useContext, useEffect } from "react";
 import CommonModel from "../CommonModel";

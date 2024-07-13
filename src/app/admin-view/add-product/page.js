@@ -1,6 +1,6 @@
 'use client'
 
-import { GlobalContext } from "@/app/context"
+import { GlobalContext } from "@/context"
 import InputComponent from "@/components/FormElements/InputComponent"
 import SelectComponent from "@/components/FormElements/SelectComponent"
 import TileComponent from "@/components/FormElements/TileComponent"

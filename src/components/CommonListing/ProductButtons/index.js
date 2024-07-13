@@ -1,7 +1,7 @@
 'use client'
 
 import ComponentLevelLoader from "@/components/Loader/componentLevelLoader";
-import { GlobalContext } from "@/app/context";
+import { GlobalContext } from "@/context";
 
 import { usePathname, useRouter } from "next/navigation";
 import { useContext } from "react";

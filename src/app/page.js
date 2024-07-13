@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext } from "react"
-import { GlobalContext } from "./context"
+import { GlobalContext } from "../context"
 
 export default function Home() {
 

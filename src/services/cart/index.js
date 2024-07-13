@@ -48,7 +48,7 @@ export const deleteFromCart = async (id) => {
     const data = await res.json();
 
     return data;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error);
   }
 };

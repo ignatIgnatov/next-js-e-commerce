@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { GlobalContext } from "../context";
+import { GlobalContext } from "../../context";
 import ComponentLevelLoader from "@/components/Loader/componentLevelLoader";
 import Notification from "@/components/Notification";
 

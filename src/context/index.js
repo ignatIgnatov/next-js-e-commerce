@@ -17,6 +17,7 @@ const GlobalState = ({ children }) => {
     });
     const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
     const [showCartModal, setShowCartModal] = useState(false);
+    const [cartItems, setCartItems] = useState([])
 
     useEffect(() => {
         if (Cookies.get('token') !== undefined) {
@@ -41,8 +42,8 @@ const GlobalState = ({ children }) => {
             setComponentLevelLoader,
             currentUpdatedProduct,
             setCurrentUpdatedProduct,
-            showCartModal,
-            setShowCartModal
+            showCartModal, setShowCartModal,
+            cartItems, setCartItems
         }}
         >
             {children}

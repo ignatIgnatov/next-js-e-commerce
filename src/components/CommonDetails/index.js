@@ -1,6 +1,6 @@
 'use client'
 
-import { GlobalContext } from '@/app/context'
+import { GlobalContext } from '@/context'
 import React, { useContext } from 'react'
 import ComponentLevelLoader from '../Loader/componentLevelLoader';
 import Notification from '../Notification';
