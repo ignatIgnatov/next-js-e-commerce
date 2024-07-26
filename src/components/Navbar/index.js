@@ -5,7 +5,7 @@ import { adminNavOptions, navOptions } from "@/utils";
 import { Fragment, useContext, useEffect } from "react";
 import CommonModel from "../CommonModel";
 import Cookies from "js-cookie";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import CartModal from "../CartModal";
 
 const NavItems = ({ isModelView = false, isAdminView, router }) => {
@@ -84,6 +84,7 @@ const Navbar = () => {
                     className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'
                   >Account</button>
                   <button
+                    onClick={() => router.push('/cart')}
                     className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'
                   >Cart</button>
                 </Fragment>

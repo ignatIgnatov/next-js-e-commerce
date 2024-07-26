@@ -10,7 +10,7 @@ const GlobalState = ({ children }) => {
     const [showNavModel, setShowNavModel] = useState(false);
     const [isAuthUser, setIsAuthUser] = useState(null);
     const [user, setUser] = useState(null);
-    const [pageLevelLoader, setPageLevelLoader] = useState(false);
+    const [pageLevelLoader, setPageLevelLoader] = useState(true);
     const [componentLevelLoader, setComponentLevelLoader] = useState({
         loading: false,
         id: "",
