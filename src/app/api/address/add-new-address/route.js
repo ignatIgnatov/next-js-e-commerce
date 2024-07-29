@@ -6,62 +6,67 @@ import { NextResponse } from "next/server";
 
 
 const AddNewAddress = Joi.object({
-    fullname: Joi.string().required(),
+    fullName: Joi.string().required(),
     address: Joi.string().required(),
     city: Joi.string().required(),
     country: Joi.string().required(),
     postalCode: Joi.string().required(),
     userID: Joi.string().required(),
-})
+});
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export const POST = async (req) => {
+export async function POST(req) {
     try {
         await connectToDB();
+
         const isAuthUser = await AuthUser(req);
 
         if (isAuthUser) {
-
             const data = await req.json();
 
-            const { fullname, address, city, country, postalCode, userID } = data;
+            const { fullName, address, city, country, postalCode, userID } = data;
 
-            const { error } = AddNewAddress.validate({ fullname, address, city, country, postalCode, userID });
+            const { error } = AddNewAddress.validate({
+                fullName,
+                address,
+                city,
+                country,
+                postalCode,
+                userID,
+            });
 
             if (error) {
-                return NextResponse({
+                return NextResponse.json({
                     success: false,
-                    message: error.details[0].message
+                    message: error.details[0].message,
                 });
             }
 
             const newlyAddedAddress = await Address.create(data);
 
             if (newlyAddedAddress) {
-                return NextResponse({
+                return NextResponse.json({
                     success: true,
-                    message: 'Address added successfully!'
+                    message: "Address added successfully!",
                 });
             } else {
-                return NextResponse({
+                return NextResponse.json({
                     success: false,
-                    message: 'Failed to add an address!'
+                    message: "Failed to add an address!",
                 });
             }
-
         } else {
-            return NextResponse({
+            return NextResponse.json({
                 success: false,
-                message: 'You are not authenticated!'
+                message: "You are not authenticated!",
             });
         }
-
-    } catch (error) {
-        console.log(error);
-        return NextResponse({
+    } catch (e) {
+        console.log(e);
+        return NextResponse.json({
             success: false,
-            message: 'Something went wrong! Please try again!'
+            message: "Something went wrong! Please try again!",
         });
     }
 }

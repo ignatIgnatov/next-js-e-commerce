@@ -81,6 +81,7 @@ const Navbar = () => {
               !isAdminView && isAuthUser ?
                 <Fragment>
                   <button
+                    onClick={() => router.push('/account')}
                     className='mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium uppercase tracking-wide text-white'
                   >Account</button>
                   <button
