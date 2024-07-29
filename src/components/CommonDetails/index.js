@@ -4,6 +4,8 @@ import { GlobalContext } from '@/context'
 import React, { useContext } from 'react'
 import ComponentLevelLoader from '../Loader/componentLevelLoader';
 import Notification from '../Notification';
+import { addToCart } from '@/services/cart';
+import { toast } from 'react-toastify';
 
 const CommonDetails = ({ item }) => {
 
