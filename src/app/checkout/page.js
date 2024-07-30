@@ -18,7 +18,7 @@ const Checkout = () => {
     const router = useRouter();
     const params = useSearchParams();
 
-    const publishableKey = 'pk_test_51PWXqNCz1Ym9ePz8NZQykTGS1gngV6ntRXQjku20ziMQ0xxIpuXbxRm47AW1tTx0P0UWE6DjcBzbmUH6XVBdIr3600XvMeXPb3';
+    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
     const stripePromise = loadStripe(publishableKey);
 
     const {
