@@ -51,6 +51,8 @@ const GlobalState = ({ children }) => {
     const [checkoutFormData, setCheckoutFormData] = useState(
         initialCheckoutFormData
     );
+    const [allOrdersForUser, setAllOrdersForUser] = useState([]);
+    const [orderDetails, setOrderDetails] = useState(null);
     const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState([]);
 
     useEffect(() => {
@@ -111,6 +113,8 @@ const GlobalState = ({ children }) => {
             addresses, setAddresses,
             addressFormData, setAddressFormData,
             checkoutFormData, setCheckoutFormData,
+            allOrdersForUser, setAllOrdersForUser,
+            orderDetails, setOrderDetails,
             allOrdersForAllUsers, setAllOrdersForAllUsers
         }}
         >

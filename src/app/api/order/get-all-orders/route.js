@@ -14,13 +14,6 @@ export async function GET(req) {
             const { searchParams } = new URL(req.url);
             const id = searchParams.get("id");
 
-            if (!id) {
-                return NextResponse.json({
-                    success: false,
-                    message: "ID is required!",
-                });
-            }
-
             const extractAllOrders = await Order.find({ user: id }).populate(
                 "orderItems.product"
             );
