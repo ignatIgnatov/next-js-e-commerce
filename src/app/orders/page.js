@@ -98,7 +98,12 @@ const Orders = () => {
                                                     ))}
                                                 </div>
                                                 <div className="flex gap-5">
-                                                    <button className="disabled:opacity-50 mt-5 mr-5  inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide">
+                                                    <button
+                                                        disabled={item.isProcessing
+                                                            ? true
+                                                            : false}
+                                                        className="disabled:opacity-50 mt-5 mr-5  inline-block bg-black text-white px-5 py-3 text-xs font-medium uppercase tracking-wide"
+                                                    >
                                                         {item.isProcessing
                                                             ? "Order is Processing"
                                                             : "Order is delivered"}
