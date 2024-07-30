@@ -1,17 +1,22 @@
 'use client'
 
+import Notification from "@/components/Notification";
 import { GlobalContext } from "@/context";
 import { fetchAllAddresses } from "@/services/address";
+import { createNewOrder } from "@/services/order";
 import { callStripeSession } from "@/services/stripe";
 import { loadStripe } from "@stripe/stripe-js";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import { PulseLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 
 
 const Checkout = () => {
 
     const router = useRouter();
+    const params = useSearchParams();
 
     const publishableKey = 'pk_test_51PWXqNCz1Ym9ePz8NZQykTGS1gngV6ntRXQjku20ziMQ0xxIpuXbxRm47AW1tTx0P0UWE6DjcBzbmUH6XVBdIr3600XvMeXPb3';
     const stripePromise = loadStripe(publishableKey);
@@ -42,6 +47,59 @@ const Checkout = () => {
             getAllAddresses();
         }
     }, [user]);
+
+    useEffect(() => {
+        const createFinalOrder = async () => {
+            const isStripe = JSON.parse(localStorage.getItem("stripe"));
+
+            if (
+                isStripe &&
+                params.get("status") === "success" &&
+                cartItems &&
+                cartItems.length > 0
+            ) {
+                setIsOrderProcessing(true);
+                const getCheckoutFormData = JSON.parse(
+                    localStorage.getItem("checkoutFormData")
+                );
+
+                const createFinalCheckoutFormData = {
+                    user: user?._id,
+                    shippingAddress: getCheckoutFormData.shippingAddress,
+                    orderItems: cartItems.map((item) => ({
+                        qty: 1,
+                        product: item.productID,
+                    })),
+                    paymentMethod: "Stripe",
+                    totalPrice: cartItems.reduce(
+                        (total, item) => item.productID.price + total,
+                        0
+                    ),
+                    isPaid: true,
+                    isProcessing: true,
+                    paidAt: new Date(),
+                };
+
+                const res = await createNewOrder(createFinalCheckoutFormData);
+
+                if (res.success) {
+                    setIsOrderProcessing(false);
+                    setOrderSuccess(true);
+                    toast.success(res.message, {
+                        position: 'top-right',
+                    });
+                } else {
+                    setIsOrderProcessing(false);
+                    setOrderSuccess(false);
+                    toast.error(res.message, {
+                        position: 'top-right',
+                    });
+                }
+            }
+        }
+
+        createFinalOrder();
+    }, [params.get('status'), cartItems]);
 
     const handleSelectedAddress = (getAddress) => {
         if (getAddress._id === selectedAddress) {
@@ -95,7 +153,36 @@ const Checkout = () => {
         console.log(error);
     }
 
+    if (orderSuccess) {
+        return (
+            <section className="h-screen bg-gray-200">
+                <div className="mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="mx-auto mt-8 max-w-screen-xl px-4 sm:px-6 lg:px-8 ">
+                        <div className="bg-white shadow">
+                            <div className="px-4 py-6 sm:px-8 sm:py-10 flex flex-col gap-5">
+                                <h1 className="font-bold text-center text-lg">
+                                    Your payment is successfull!
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
+    if (isOrderProcessing) {
+        return (
+            <div className="w-full min-h-screen flex justify-center items-center">
+                <PulseLoader
+                    color={"#000000"}
+                    loading={isOrderProcessing}
+                    size={30}
+                    data-testid="loader"
+                />
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -209,6 +296,7 @@ const Checkout = () => {
                     </div>
                 </div>
             </div>
+            <Notification />
         </div>
     )
 }
