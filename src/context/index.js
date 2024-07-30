@@ -1,6 +1,7 @@
 'use client'
 
 import Cookies from "js-cookie";
+import { usePathname, useRouter } from "next/navigation";
 import { createContext, useEffect, useState } from "react";
 
 export const GlobalContext = createContext(null);
@@ -14,7 +15,18 @@ export const initialCheckoutFormData = {
     isProcessing: true,
 };
 
+const protectedRoutes = ["cart", "checkout", "account", "orders", "admin-view"];
+
+const protectedAdminRoutes = [
+    "/admin-view",
+    "/admin-view/add-product",
+    "/admin-view/all-products",
+];
+
 const GlobalState = ({ children }) => {
+
+    const router = useRouter();
+    const pathName = usePathname();
 
     const [showNavModel, setShowNavModel] = useState(false);
     const [isAuthUser, setIsAuthUser] = useState(null);
@@ -39,6 +51,7 @@ const GlobalState = ({ children }) => {
     const [checkoutFormData, setCheckoutFormData] = useState(
         initialCheckoutFormData
     );
+    const [allOrdersForAllUsers, setAllOrdersForAllUsers] = useState([]);
 
     useEffect(() => {
         if (Cookies.get('token') !== undefined) {
@@ -49,8 +62,36 @@ const GlobalState = ({ children }) => {
             setCartItems(getCartItems);
         } else {
             setIsAuthUser(false);
+            setUser({}); //unauthenticated user
         }
-    }, [Cookies])
+    }, [Cookies]);
+
+    useEffect(() => {
+        if (
+            pathName !== "/register" &&
+            !pathName.includes("product") &&
+            pathName !== "/" &&
+            user &&
+            Object.keys(user).length === 0 &&
+            protectedRoutes.includes(pathName) > -1
+        ) {
+            router.push("/login");
+        }
+
+    }, [user, pathName]);
+
+    useEffect(() => {
+        if (
+            user !== null &&
+            user &&
+            Object.keys(user).length > 0 &&
+            user?.role !== "admin" &&
+            protectedAdminRoutes.indexOf(pathName) > -1
+        ) {
+            router.push("/unauthorized-page");
+        }
+
+    }, [user, pathName]);
 
     return (
         <GlobalContext.Provider value={{
@@ -70,6 +111,7 @@ const GlobalState = ({ children }) => {
             addresses, setAddresses,
             addressFormData, setAddressFormData,
             checkoutFormData, setCheckoutFormData,
+            allOrdersForAllUsers, setAllOrdersForAllUsers
         }}
         >
             {children}

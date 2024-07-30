@@ -153,6 +153,14 @@ const Checkout = () => {
         console.log(error);
     }
 
+    useEffect(() => {
+        if (orderSuccess) {
+            setTimeout(() => {
+                router.push('/orders');
+            }, [2000])
+        }
+    }, [orderSuccess]);
+
     if (orderSuccess) {
         return (
             <section className="h-screen bg-gray-200">
