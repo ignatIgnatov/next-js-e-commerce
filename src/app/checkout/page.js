@@ -2,6 +2,8 @@
 
 import { GlobalContext } from "@/context";
 import { fetchAllAddresses } from "@/services/address";
+import { callStripeSession } from "@/services/stripe";
+import { loadStripe } from "@stripe/stripe-js";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
@@ -10,6 +12,9 @@ import { useContext, useEffect, useState } from "react";
 const Checkout = () => {
 
     const router = useRouter();
+
+    const publishableKey = 'pk_test_51PWXqNCz1Ym9ePz8NZQykTGS1gngV6ntRXQjku20ziMQ0xxIpuXbxRm47AW1tTx0P0UWE6DjcBzbmUH6XVBdIr3600XvMeXPb3';
+    const stripePromise = loadStripe(publishableKey);
 
     const {
         cartItems,
@@ -21,6 +26,8 @@ const Checkout = () => {
     } = useContext(GlobalContext);
 
     const [selectedAddress, setSelectedAddress] = useState(null);
+    const [isOrderProcessing, setIsOrderProcessing] = useState(false);
+    const [orderSuccess, setOrderSuccess] = useState(false);
 
     const getAllAddresses = async () => {
         const res = await fetchAllAddresses(user?._id);
@@ -61,9 +68,33 @@ const Checkout = () => {
         });
     }
 
-    async function handleCheckout() {
-       
+    const handleCheckout = async () => {
+        const stripe = await stripePromise;
+
+        const createLineItems = cartItems.map((item) => ({
+            price_data: {
+                currency: "usd",
+                product_data: {
+                    images: [item.productID.imageUrl],
+                    name: item.productID.name,
+                },
+                unit_amount: item.productID.price * 100,
+            },
+            quantity: 1,
+        }));
+
+        const res = await callStripeSession(createLineItems);
+        setIsOrderProcessing(true);
+        localStorage.setItem("stripe", true);
+        localStorage.setItem("checkoutFormData", JSON.stringify(checkoutFormData));
+
+        const { error } = await stripe.redirectToCheckout({
+            sessionId: res.id,
+        });
+
+        console.log(error);
     }
+
 
 
     return (
